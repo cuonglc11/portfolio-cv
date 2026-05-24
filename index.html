@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Lù Mạnh Cường | Fullstack Developer Portfolio</title>
+    <style>
+        /* --- HỆ THỐNG MÀU SẮC CYBERPUNK CHUYÊN NGHIỆP --- */
+        :root {
+            --bg-dark: #0a0f1d;
+            --bg-card: rgba(16, 22, 42, 0.7);
+            --border-glow: rgba(0, 242, 254, 0.3);
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #00ff87;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- 1. HIỆU ỨNG INTRO VIDEO (CINEMATIC LOADER) --- */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #05050a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s;
+        }
+
+        .intro-scanner {
+            width: 250px;
+            height: 2px;
+            background: var(--primary);
+            box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+            animation: scan 1.5s infinite ease-in-out;
+            margin-top: 20px;
+        }
+
+        .intro-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+            animation: blinkText 0.8s infinite alternate;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateY(-30px);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translateY(30px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-30px);
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes blinkText {
+            from {
+                opacity: 0.4;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* --- 2. CANVAS HẠT NỀN CHUYỂN ĐỘNG (BACKGROUND PARTICLES) --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- 3. BỐ CỤC CHÍNH (MAIN INTERFACE) --- */
+        .wrapper {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 1.2s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+
+        .wrapper.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .cv-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 242, 254, 0.1);
+        }
+
+        /* --- HEADER BANNER VỚI HIỆU ỨNG ÁNH SÁNG QUÉT --- */
+        header {
+            position: relative;
+            padding: 50px 40px;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.15), rgba(0, 242, 254, 0.03));
+            border-bottom: 1px solid var(--border-glow);
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transform: skewX(-25deg);
+            animation: lightGlare 6s infinite ease-in-out;
+        }
+
+        @keyframes lightGlare {
+            0% {
+                left: -100%;
+            }
+
+            30%,
+            100% {
+                left: 150%;
+            }
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            box-shadow: 0 0 25px var(--primary);
+            animation: float 4s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-8px) rotate(2deg);
+            }
+        }
+
+        .avatar-svg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #111827;
+        }
+
+        .header-text h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .header-text .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .header-text .badge-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .header-text .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        /* --- BỐ CỤC NỘI DUNG (GRID) --- */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 40px;
+            padding: 40px;
+        }
+
+        @media (max-width: 850px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                padding: 25px;
+            }
+
+            header {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+
+            .header-text .badge-group {
+                justify-content: center;
+            }
+        }
+
+        /* Hiệu ứng hiển thị mượt của từng khối mục */
+        .reveal-block {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            margin-bottom: 30px;
+        }
+
+        .reveal-block.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2.title-sec {
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            color: var(--primary);
+            letter-spacing: 1.5px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2.title-sec::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--border-glow), transparent);
+        }
+
+        /* --- THÔNG TIN LIÊN HỆ --- */
+        .contact-info p {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- KỸ NĂNG (HIỆU ỨNG THANH VIDEO TỰ CHẠY) --- */
+        .skill-item {
+            margin-bottom: 14px;
+        }
+
+        .skill-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .skill-track {
+            background: rgba(255, 255, 255, 0.05);
+            height: 6px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            width: 0;
+            box-shadow: 0 0 8px var(--primary);
+            transition: width 1.8s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+
+        /* --- TIMELINE VIDEO STYLE --- */
+        .timeline {
+            border-left: 1px solid rgba(0, 242, 254, 0.2);
+            padding-left: 20px;
+        }
+
+        .time-node {
+            position: relative;
+            padding-bottom: 25px;
+        }
+
+        .time-node:last-child {
+            padding-bottom: 5px;
+        }
+
+        .time-node::before {
+            content: '';
+            position: absolute;
+            left: -26.5px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .time-tag {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .job-title {
+            font-size: 1.1rem;
+            margin: 3px 0;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .company {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .job-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: justify;
+        }
+
+        /* --- CARD DỰ ÁN CHIẾU SÁNG (GLOW HOVER) --- */
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .video-card:hover {
+            background: rgba(0, 242, 254, 0.02);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+            transform: translateX(4px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .card-meta {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .card-tech {
+            font-size: 0.75rem;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .card-desc ul {
+            padding-left: 16px;
+            margin-top: 5px;
+        }
+
+        .card-desc li {
+            margin-bottom: 4px;
+            text-align: justify;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="intro-overlay">
+        <div class="intro-text">INITIALIZING LU_MANH_CUONG_CV.EXE...</div>
+        <div class="intro-scanner"></div>
+    </div>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="wrapper" id="cv-wrapper">
+        <div class="cv-container">
+
+            <header>
+                <div class="avatar-wrapper">
+                    <svg class="avatar-svg" viewBox="0 0 100 100">
+                        <circle cx="50" cy="45" r="18" fill="#475569" />
+                        <path d="M32,40 Q50,22 68,40" fill="#00f2fe" />
+                        <g id="eyes" fill="#fff">
+                            <circle cx="44" cy="43" r="2" />
+                            <circle cx="56" cy="43" r="2" />
+                        </g>
+                        <path d="M46,50 Q50,54 54,50" stroke="#fff" stroke-width="1.5" fill="none" />
+                        <path d="M25,85 C30,65 70,65 75,85 Z" fill="#1e40af" />
+                        <path d="M35,82 L65,82 L68,92 L32,92 Z" fill="#334155" />
+                        <g id="hand">
+                            <circle cx="42" cy="85" r="2.5" fill="#fff" />
+                            <circle cx="58" cy="85" r="2.5" fill="#fff" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>LÙ MẠNH CƯỜNG</h1>
+                    <div class="subtitle">Fullstack Developer (ASP.NET Core & Laravel)</div>
+                    <div class="badge-group">
+                        <span class="badge">Clean Architecture</span>
+                        <span class="badge">Enterprise Systems</span>
+                        <span class="badge">GenAI & Automation</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="main-content">
+
+                <div class="col-left">
+
+                    <div class="reveal-block contact-info">
+                        <h2 class="title-sec">Thông Tin Cá Nhân</h2>
+                        <p>📅 <strong>Ngày sinh:</strong> 17/08/1996</p>
+                        <p>📞 <strong>Điện thoại:</strong> 0363487035</p>
+                        <p>✉️ <strong>Email:</strong> lucuong837@gmail.com</p>
+                        <p>🌐 <strong>GitHub:</strong> github.com/cuonglc11</p>
+                        <p>📍 <strong>Địa chỉ:</strong> Số nhà 27, Ngõ 58, Phố Trần Bình, Mai Dịch, Cầu Giấy, Hà Nội</p>
+                    </div>
+
+                    <div class="reveal-block">
+                        <h2 class="title-sec">Mục Tiêu Nghề Nghiệp</h2>
+                        <p
+                            style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; text-align: justify;">
+                            🎯 <strong>Ngắn hạn:</strong> Áp dụng tư duy kiến trúc hệ thống và năng lực thực chiến
+                            chuyên sâu về ASP.NET Core và Laravel để xây dựng, tối ưu hóa các hệ thống Enterprise quy mô
+                            lớn; tiên phong ứng dụng giải pháp Generative AI và tự động hóa để tinh gọn quy trình nghiệp
+                            vụ cho doanh nghiệp.
+                        </p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); text-align: justify;">
+                            🚀 <strong>Dài hạn:</strong> Trở thành một Software Architect / Technical Lead có năng lực
+                            dẫn dắt đội ngũ kỹ thuật và tham gia vào các dự án quốc tế phức tạp.
+                        </p>
+                    </div>
+
+                    <div class="reveal-block">
+                        <h2 class="title-sec">Kỹ Năng</h2>
+
+                        <div class="skill-item">
+                            <div class="skill-label"><span>ASP.NET Core / C#</span><span>90%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-label"><span>Laravel / PHP</span><span>85%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-label"><span>Clean Architecture / CQRS</span><span>85%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-label"><span>Databases (SQL Server, MySQL...)</span><span>80%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-width="80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-label"><span>AI Integration & n8n Automation</span><span>75%</span></div>
+                            <div class="skill-track">
+                                <div class="skill-fill" data-width="75%"></div>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; line-height: 1.4;">
+                            💡 <strong>Khác:</strong> Java, JavaScript/TypeScript, Next.js, ReactJS, Angular, VueJS,
+                            Tailwind CSS, Redis (Caching), Docker, Unit Testing (Japanese standard).
+                        </p>
+                    </div>
+
+                    <div class="reveal-block">
+                        <h2 class="title-sec">Học Vấn</h2>
+                        <div style="margin-bottom: 10px;">
+                            <span style="font-size: 0.75rem; color: var(--accent); font-weight: bold;">2023 -
+                                2025</span>
+                            <h4 style="font-size: 0.95rem; font-weight: 700;">Hệ thống Đào tạo Lập trình viên Quốc tế
+                                APTECH</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">Chứng chỉ Nghề nghiệp Cao cấp
+                                (ADSE)</p>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.75rem; color: var(--accent); font-weight: bold;">2015 -
+                                2020</span>
+                            <h4 style="font-size: 0.95rem; font-weight: 700;">Trường Đại học Mỏ - Địa chất</h4>
+                        </div>
+                    </div>
+
+                    <div class="reveal-block">
+                        <h2 class="title-sec">Chứng Chỉ</h2>
+                        <span style="font-size: 0.75rem; color: var(--accent); font-weight: bold;">28/07/2025</span>
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);">Chứng chỉ Quốc tế
+                            chuyên sâu về Generative AI (GenAI)</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-top: 4px;">
+                            Cấp bởi Tập đoàn USW International. Chuyên sâu về NLP, ChatGPT, Copilot API, n8n workflow và
+                            tự động hóa quy trình nghiệp vụ.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="col-right">
+
+                    <div class="reveal-block">
+                        <h2 class="title-sec">Kinh Nghiệm Làm Việc</h2>
+                        <div class="timeline">
+
+                            <div class="time-node">
+                                <span class="time-tag">10/2024 - NAY</span>
+                                <div class="job-title">Freelancer & Cố vấn Công nghệ</div>
+                                <div class="company">VDATA (Công nghệ Phần mềm)</div>
+                                <div class="job-desc">
+                                    Tư vấn, thiết kế cấu trúc Database quan hệ cho các hệ thống quản lý nội bộ. Áp dụng
+                                    Service Pattern để cô lập nghiệp vụ phức tạp, tối ưu hóa hiệu suất truy vấn giúp hệ
+                                    thống chạy mượt mà hơn 30% so với phiên bản cũ.
+                                </div>
+                            </div>
+
+                            <div class="time-node">
+                                <span class="time-tag">02/2022 - 10/2024</span>
+                                <div class="job-title">Fullstack Developer (Level 2)</div>
+                                <div class="company">FPT SOFTWARE</div>
+                                <div class="job-desc">
+                                    Nghiên cứu và phát triển các hệ thống thuộc nhóm chiến lược (Top 3 dự án lớn nhất
+                                    FPT) dành cho đối tác Nhật Bản trong lĩnh vực Logistics và Y tế. Làm việc dưới quy
+                                    trình QC và quy chuẩn Unit Testing (Japanese standard) vô cùng nghiêm ngặt. Xây dựng
+                                    module TMĐT, xử lý đồng bộ dữ liệu lớn và thiết kế cấu trúc hệ thống đảm bảo tính mở
+                                    rộng (scalability) cao.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="reveal-block">
+                        <h2 class="title-sec">Dự Án Tiêu Biểu</h2>
+                        <div class="projects-list">
+
+                            <div class="video-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">1. Smart WMS - Quản Lý Chuỗi Cung Ứng & Kho Hàng</h3>
+                                    <span class="card-meta">03/2026 - Nay</span>
+                                </div>
+                                <div class="card-tech">ASP.NET Core 8, C#, SQL Server, Redis, Clean Architecture</div>
+                                <div class="card-desc">
+                                    <strong>Vị trí: Software Architect & Backend Lead</strong>
+                                    <ul>
+                                        <li>Thiết kế kiến trúc hệ thống tách biệt hoàn toàn Core Domain và
+                                            Infrastructure, tăng khả năng bảo trì và mở rộng hệ thống.</li>
+                                        <li>Áp dụng Repository Pattern kết hợp Unit of Work quản lý nghiêm ngặt
+                                            Transaction cơ sở dữ liệu, triệt tiêu lỗi lệch tồn kho.</li>
+                                        <li>Tích hợp giải pháp AI OCR tự động quét, phân tích hóa đơn đầu vào, đồng bộ
+                                            qua Webhook giảm 70% thời gian nhập liệu thủ công.</li>
+                                        <li>Cấu hình Redis Caching cho các truy vấn High-Traffic, giảm tải 40% cho SQL
+                                            Server giờ cao điểm.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="video-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">2. API Gateway MustGo - Trục Đồng Bộ Booking OTA Toàn Cầu
+                                    </h3>
+                                    <span class="card-meta">07/2025 - 11/2025</span>
+                                </div>
+                                <div class="card-tech">Laravel 10, PHP, MySQL, Redis, Service Pattern, Event-Driven
+                                </div>
+                                <div class="card-desc">
+                                    <strong>Vị trí: Backend API Engineer</strong>
+                                    <ul>
+                                        <li>Xây dựng kiến trúc Service Pattern biệt lập xử lý API tích hợp với các đối
+                                            tác lớn (Agoda, Meituan, TongCheng, MgBed).</li>
+                                        <li>Triển khai cơ chế Idempotency Key phối hợp cùng Database Transaction mức độ
+                                            cao nhất nhằm loại bỏ lỗi Overbooking (trùng phòng) khi chịu tải lớn.</li>
+                                        <li>Phát triển Webhook Callback dùng Queue Job (Event-Driven) giải quyết bất
+                                            đồng bộ lệnh sửa/hủy booking, giảm 20-30% lỗi hệ thống.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="video-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">3. Cổng Thanh Toán & Đối Soát Giao Dịch Tự Động</h3>
+                                    <span class="card-meta">09/2025 - 02/2026</span>
+                                </div>
+                                <div class="card-tech">ASP.NET Core 8, C#, SQL Server, Redis, CQRS (MediatR), DDD</div>
+                                <div class="card-desc">
+                                    <strong>Vị trí: Backend Engineer</strong>
+                                    <ul>
+                                        <li>Áp dụng mô hình CQRS phân tách luồng ghi (Command) và đọc báo cáo (Query)
+                                            giúp tối ưu hiệu suất cho hệ thống High-Traffic.</li>
+                                        <li>Giải quyết bài toán Race Condition và Concurrency Control triệt để khi hàng
+                                            vạn người dùng cùng thao tác thanh toán tại một thời điểm.</li>
+                                        <li>Tích hợp Distributed Lock bằng Redis kết hợp kiến trúc Event-Driven qua
+                                            In-Memory Queue bảo đảm không trừ tiền trùng.</li>
+                                        <li>Xây dựng công cụ Auto-Reconciliation Engine tự động đối soát file log ngân
+                                            hàng hàng đêm và cảnh báo sai lệch tài chính ngay lập tức.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="video-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">4. Beautiful Beaches - Nền Tảng Tìm Kiếm & Chatbot AI</h3>
+                                    <span class="card-meta">06/2025 - 08/2025</span>
+                                </div>
+                                <div class="card-tech">Laravel 10, ReactJS, MySQL, n8n Workflow Automation, GenAI API
+                                </div>
+                                <div class="card-desc">
+                                    <strong>Vị trí: Fullstack Team Leader</strong>
+                                    <ul>
+                                        <li>Quản lý, phân tích nghiệp vụ hệ thống và điều phối công việc cho đội ngũ
+                                            phát triển sản phẩm.</li>
+                                        <li>Xây dựng trục tự động hóa bằng n8n workflow kết hợp GenAI tạo Chatbot thông
+                                            minh tự động gợi ý lịch trình thời gian thực.</li>
+                                        <li>Tích hợp thuật toán xử lý dữ liệu vị trí địa lý Geolocation Queries để tối
+                                            ưu hóa gợi ý bãi biển xung quanh người dùng.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. TẮT MÀN HÌNH CHÀO (INTRO) VÀ KÍCH HOẠT HIỆU ỨNG TẢI TRANG KIỂU VIDEO
+        window.addEventListener('load', () => {
+            const intro = document.getElementById('intro-overlay');
+            const wrapper = document.getElementById('cv-wrapper');
+
+            setTimeout(() => {
+                intro.style.opacity = '0';
+                intro.style.visibility = 'hidden';
+                wrapper.classList.add('active');
+
+                // Kích hoạt chạy các khối nội dung nối đuôi nhau (Staggered Delay)
+                const blocks = document.querySelectorAll('.reveal-block');
+                blocks.forEach((block, index) => {
+                    setTimeout(() => {
+                        block.classList.add('visible');
+
+                        // Chạy thanh phần trăm kỹ năng tự động đổ đầy
+                        const fills = block.querySelectorAll('.skill-fill');
+                        fills.forEach(fill => {
+                            fill.style.width = fill.getAttribute('data-width');
+                        });
+                    }, index * 150);
+                });
+            }, 1800);
+        });
+
+        // 2. CODE TẠO HIỆU ỨNG HẠT LƠ LỬNG TRÊN CANVAS (BACKGROUND PARTICLES)
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.opacity = Math.random() * 0.4 + 0.15;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 242, 254, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // Hiệu ứng chớp mắt cho Avatar SVG thêm phần sinh động
+        const eyes = document.getElementById('eyes');
+        setInterval(() => {
+            eyes.style.transform = 'scaleY(0.1)';
+            setTimeout(() => { eyes.style.transform = 'scaleY(1)'; }, 150);
+        }, 4000);
+    </script>
+</body>
+
+</html>
